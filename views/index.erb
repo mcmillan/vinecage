@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+  <head>
+
+    <title>cage.io</title>
+
+    <style>
+
+    body, input, button {
+
+      font: 13px 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+
+    }
+
+    body {
+
+      background: #333;
+
+      text-align: center;
+
+      color: #fff;
+
+    }
+
+    #status {
+
+      display: none;
+
+      font-size: 32px;
+      font-weight: bold;
+
+      position: absolute;
+      top: 50%;
+      left: 0;
+
+      width: 100%;
+
+      margin-top: -40px;
+
+    }
+
+    #intro input {
+
+      background: #fff;
+      border: none;
+      padding: 10px 12px;
+      margin: 0;
+
+      width: 300px;
+
+      line-height: 15px;
+
+      display: inline-block;
+
+      outline: none;
+
+    }
+
+    #intro button {
+
+      background: #00a47a;
+      border: 0;
+      padding: 10px 20px;
+      margin: 0;
+
+      color: #fff;
+
+      font-weight: bold;
+
+      line-height: 15px;
+
+      display: inline-block;
+
+    }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <div id="intro">
+
+      <h1>Vine + Nicolas Cage</h1>
+
+      <p>What more could you possibly want?</p>
+
+      <form>
+
+        <input type="text" placeholder="Enter a Vine URL here (e.g. vine.co/v/asdSifUd)"><button type="submit">Go</button>
+
+      </form>
+
+    </div>
+
+    <div id="status">
+
+      Processing your video...
+
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="//js.pusher.com/2.0/pusher.min.js"></script>
+    <script>
+
+    var pusher = new Pusher('<%= ENV['PUSHER_KEY'] %>')
+
+    $('form').on('submit', function(event) {
+
+      event.preventDefault();
+
+      url = $.trim($(this).find('input').val());
+
+      if(!url || !url.match(/http(s)?:\/\/vine.co\/v\/(.+)/ig))
+        return alert('Please enter a valid Vine URL.');
+
+      $.ajax({
+
+        url: '/cageify',
+        type: 'post',
+        data: {
+
+          url: url
+
+        },
+        success: function(response) {
+
+          if(response.status == 'queued') {
+
+            $('#intro').fadeOut(300);
+            $('#status').delay(300).fadeIn(300);
+
+            var channel = pusher.subscribe(response.id);
+            
+            channel.bind('update_status', function(status) {
+
+              $('#status').text(status);
+
+            });
+
+            channel.bind('done', function(id) {
+
+              window.location = '/v/' + id;
+
+            });
+
+          }
+          else if(response.status == 'done') {
+
+            window.location = '/v/' + response.id;
+
+          }
+          else {
+
+            alert('Something went wrong.');
+
+          }
+
+        },
+        error: function() {
+
+          alert('Something went wrong.');
+
+        }
+
+      });
+
+    });
+
+    </script>
+
+  </body>
+
+</html>
