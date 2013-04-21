@@ -32,7 +32,7 @@ class ConversionWorker
 
     Pusher.trigger(filename, 'update_status', 'Splitting up video into individual frames...')
 
-    `ffmpeg -y -r 20 -vcodec libx264 -i tmp/video/#{filename}.mp4 -r 20 -f image2 tmp/stills/#{filename}/frame%07d.png`
+    `ffmpeg -y -i tmp/video/#{filename}.mp4 -r 20 -f image2 tmp/stills/#{filename}/frame%07d.png`
 
     Pusher.trigger(filename, 'update_status', 'Adding Sir Nicolas Cage...')
 
