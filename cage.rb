@@ -34,7 +34,7 @@ class ConversionWorker
 
     Pusher.trigger(filename, 'update_status', 'Replacing your face with Nicholas Cage\'s...')
 
-    detector = OpenCV::CvHaarClassifierCascade::load('haar/haarcascade_frontalface_alt.xml')
+    detector = OpenCV::CvHaarClassifierCascade::load('haarcascades/haarcascade_frontalface_alt.xml')
 
     cage = Magick::Image.read('cage.png').first
 
