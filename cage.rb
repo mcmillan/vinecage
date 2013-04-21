@@ -1,7 +1,7 @@
 require 'open-uri'
 require 'nokogiri'
 require 'opencv'
-require 'rmagick'
+require 'RMagick'
 require 'sidekiq'
 require 'sinatra'
 require 'sinatra/reloader'
@@ -32,7 +32,7 @@ class ConversionWorker
 
     `ffmpeg -y -i tmp/video/#{filename}.mp4 -r 20 -f image2 tmp/stills/#{filename}/frame%07d.png`
 
-    Pusher.trigger(filename, 'update_status', 'Replacing your face with Nicholas Cage\'s...')
+    Pusher.trigger(filename, 'update_status', 'Adding Sir Nicolas Cage...')
 
     detector = OpenCV::CvHaarClassifierCascade::load('haarcascades/haarcascade_frontalface_alt.xml')
 
