@@ -58,7 +58,7 @@ class ConversionWorker
 
     Pusher.trigger(filename, 'update_status', 'Stealing the declaration of independence...')
 
-    `ffmpeg -y -i tmp/stills/#{filename}/frame%07d.png -vcodec mpeg4 -q 6 -r 20 public/video/#{filename}.mp4`
+    `ffmpeg -y -i tmp/stills/#{filename}/frame%07d.png -vcodec mpeg4 -r 20 public/video/#{filename}.mp4`
 
     FileUtils.rm_rf("tmp/stills/#{filename}")
     FileUtils.rm_rf("tmp/video/#{filename}.mp4")
