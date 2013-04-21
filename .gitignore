@@ -2,3 +2,4 @@ public/video/*.mp4
 tmp/stills/*/
 tmp/video/*/
 .DS_Store
+.env
