@@ -34,11 +34,16 @@ class ConversionWorker
 
     `ffmpeg -y -i tmp/video/#{filename}.mp4 -r 20 -f image2 tmp/stills/#{filename}/frame%07d.png`
 
-    Pusher.trigger(filename, 'update_status', 'Adding Sir Nicolas Cage...')
+    Pusher.trigger(filename, 'update_status', 'Adding some Nicolas Cage...')
 
     detector = OpenCV::CvHaarClassifierCascade::load('haarcascades/haarcascade_frontalface_alt.xml')
 
     cage = Magick::Image.read('cage.png').first
+
+    count = Dir.glob("tmp/stills/#{filename}/*.png").length
+    current = 0
+
+    puts count
 
     Dir.glob("tmp/stills/#{filename}/*.png") do |file|
       puts file
@@ -54,6 +59,11 @@ class ConversionWorker
       end
 
       im_image.write(file)
+      current += 1
+
+      if current % 5 == 0
+        Pusher.trigger(filename, 'update_status', "Adding some Nicolas Cage (#{current}/#{count})...")
+      end
     end
 
     Pusher.trigger(filename, 'update_status', 'Stealing the declaration of independence...')
