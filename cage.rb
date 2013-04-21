@@ -32,7 +32,7 @@ class ConversionWorker
 
     Pusher.trigger(filename, 'update_status', 'Splitting up video into individual frames...')
 
-    `ffmpeg -y -i tmp/video/#{filename}.mp4 -r 20 -f image2 tmp/stills/#{filename}/frame%07d.png`
+    `ffmpeg -y -r 20 -i tmp/video/#{filename}.mp4 -r 20 -f image2 tmp/stills/#{filename}/frame%07d.png`
 
     Pusher.trigger(filename, 'update_status', 'Adding Sir Nicolas Cage...')
 
@@ -58,7 +58,7 @@ class ConversionWorker
 
     Pusher.trigger(filename, 'update_status', 'Stealing the declaration of independence...')
 
-    `ffmpeg -y -i tmp/stills/#{filename}/frame%07d.png -vcodec mpeg4 -r 20 public/video/#{filename}.mp4`
+    `ffmpeg -y -r 20 -i tmp/stills/#{filename}/frame%07d.png -vcodec libx264 -r 20 public/video/#{filename}.mp4`
 
     FileUtils.rm_rf("tmp/stills/#{filename}")
     FileUtils.rm_rf("tmp/video/#{filename}.mp4")
