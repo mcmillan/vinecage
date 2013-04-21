@@ -43,10 +43,7 @@ class ConversionWorker
     count = Dir.glob("tmp/stills/#{filename}/*.png").length
     current = 0
 
-    puts count
-
     Dir.glob("tmp/stills/#{filename}/*.png") do |file|
-      puts file
       cv_image = OpenCV::CvMat.load(file)
       im_image = Magick::Image.read(file).first
 
