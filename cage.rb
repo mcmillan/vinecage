@@ -15,6 +15,8 @@ Pusher.secret = ENV['PUSHER_SECRET']
 class ConversionWorker
   include Sidekiq::Worker
 
+  sidekiq_options :retry => false, :backtrace => true
+
   def perform(vine_id)
     vine = Nokogiri::HTML(open("https://vine.co/v/#{vine_id}"))
 
